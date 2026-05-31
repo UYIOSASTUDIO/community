@@ -32,15 +32,32 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      {/* TITLE BAR IMAGE — 1920×180 */}
-      <section className="border-b border-line grayscale py-[20px]">
-        <img
-          src="/sport.svg"
-          alt="Courtside"
-          width={1920}
-          height={180}
-          className="block w-full h-auto"
-        />
+      {/* HERO — full-screen video with sport.svg overlay at the bottom.
+          -mt-16 pulls it up under the fixed chrome so the video fills the
+          entire viewport (chrome is translucent and sits on top). */}
+      <section className="relative -mt-16 h-[100svh] w-full overflow-hidden bg-ink">
+        <video
+          className="absolute inset-0 h-full w-full object-cover mix-blend-exclusion"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/title-bar.png"
+        >
+          <source src="/video/nike-vid.mp4" type="video/mp4" />
+        </video>
+
+        {/* SVG overlay — full width minus header padding, pinned to bottom. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 px-4 sm:px-6 pb-4 sm:pb-6">
+          <img
+            src="/sport-white.svg"
+            alt="Courtside"
+            width={1920}
+            height={180}
+            className="block w-full h-auto mix-blend-exclusion"
+          />
+        </div>
       </section>
 
       {/* MISSION — Was wir sind */}
