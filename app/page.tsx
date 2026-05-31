@@ -44,18 +44,14 @@ export default function Home() {
       </section>
 
       {/* MISSION — Was wir sind */}
-      <section className="border-b border-line">
-        <div className="px-4 sm:px-6 py-4 border-b border-line">
-          <p className="meta text-muted">Was wir sind</p>
-        </div>
-        <div className="px-4 sm:px-6 py-10">
-          <p className="text-xl sm:text-3xl leading-snug font-medium max-w-4xl">
-            Courtside bringt Leute wieder raus. Keine Vereinsmitgliedschaft, keine Wartelisten —
-            einfach zeigen, spielen, Community aufbauen. Wir organisieren regelmäßige Treffen und
-            Turniere in Street Basketball, Fußball, Volleyball und Beach Volleyball.
-            Jeder ist willkommen, egal welches Level.
-          </p>
-        </div>
+      <section className="border-b border-line px-4 sm:px-6 py-10">
+        <p className="meta text-muted mb-3">Was wir sind</p>
+        <p className="text-xl sm:text-3xl leading-snug font-extrabold max-w-4xl">
+          Courtside bringt Leute wieder raus. Keine Vereinsmitgliedschaft, keine Wartelisten —
+          einfach zeigen, spielen, Community aufbauen. Wir organisieren regelmäßige Treffen und
+          Turniere in Street Basketball, Fußball, Volleyball und Beach Volleyball.
+          Jeder ist willkommen, egal welches Level.
+        </p>
       </section>
 
       {/* SPORTARTEN — Buttons */}
