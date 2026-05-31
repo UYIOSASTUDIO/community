@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Same fill as the page so iOS Safari shows no dark band behind its bar. */
+  background-color: #ebebeb;
+  /* Kill any horizontal drag */
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #ebebeb;
+  color: #111111;
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NOTE: do not lock body scroll here. On iOS Safari toggling
+   overflow:hidden forces the address bar to expand and leaves a grey
+   band behind. The full-screen nav overlay (fixed inset-0, opaque,
+   overscroll-contain) already covers the page, so no body lock is needed. */
+
+.mobile-nav-panel {
+  background-color: #ebebeb;
+}
+
+/* Custom selection color */
+::selection {
+  background: #111111;
+  color: #ebebeb;
+}
+
+/* Thin, transparent scrollbar */
+html {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(17, 17, 17, 0.4) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(17, 17, 17, 0.4);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(17, 17, 17, 0.7);
+}
+
+/* Hard edges everywhere — kill default rounding */
+input,
+button,
+textarea,
+select {
+  border-radius: 0;
+}
+
+/* --- Marquee ticker --- */
+@keyframes pickup-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: pickup-marquee 60s linear infinite;
+  will-change: transform;
+}
+
+.marquee-mask:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Reusable label utility — mono uppercase meta text */
+.meta {
+  font-family: var(--font-mono), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 10px;
+  line-height: 1;
+}
