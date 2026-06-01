@@ -48,17 +48,23 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      {/* HERO video — FIXED background. It stays put while the SVG and the
-          content below scroll up and over it. z-0 keeps it behind the opaque
+      {/* HERO video — DESKTOP only: FIXED background. Stays put while the SVG
+          and content scroll up and over it. z-0 keeps it behind the opaque
           content sheet; the transparent hero spacer reveals it. Click toggles
-          play/pause. */}
-      <HeroVideo />
+          play/pause. Hidden on mobile because a permanent full-screen fixed
+          element makes iOS Safari leave a grey band behind its bottom bar. */}
+      <HeroVideo className="fixed inset-0 z-0 hidden md:block" />
 
-      {/* HERO spacer — transparent, full viewport height. Reveals the fixed
-          video behind it. The SVG is pinned to its bottom and scrolls up over
-          the video as the page moves. -mt-16 pulls it under the fixed chrome.
-          pointer-events-none lets clicks fall through to the video. */}
+      {/* HERO spacer — full viewport height. On desktop it's transparent and
+          reveals the fixed video; on mobile it holds the video inline so it
+          scrolls normally (no permanent fixed element → iOS-safe). -mt-16 pulls
+          it under the fixed chrome. */}
       <section className="pointer-events-none relative z-10 -mt-16 h-[100svh] w-full">
+        {/* MOBILE video — inline, scrolls with the hero. Hidden on desktop.
+            pointer-events-auto so it stays clickable inside the (otherwise
+            click-through) hero spacer. */}
+        <HeroVideo className="pointer-events-auto absolute inset-0 z-0 md:hidden" />
+
         {/* SVG overlay — full width minus header padding, pinned to bottom.
             Two variants: sport-desktop.svg from lg up (desktop + iPad landscape ≥1024px),
             sport-mobile.svg below that (phones + iPad portrait). */}
