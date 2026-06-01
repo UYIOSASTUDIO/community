@@ -8,6 +8,7 @@ import { createPortal } from "react-dom";
 const LINKS: { href: string; label: string }[] = [
   { href: "/", label: "Community" },
   { href: "/events", label: "Events" },
+  { href: "/courts", label: "Courts" },
   { href: "/kalender", label: "Kalender" },
   { href: "/subscribe", label: "Newsletter" },
 ];

@@ -37,7 +37,7 @@ export default function Home() {
           entire viewport (chrome is translucent and sits on top). */}
       <section className="relative -mt-16 h-[100svh] w-full overflow-hidden bg-ink">
         <video
-          className="absolute inset-0 h-full w-full object-cover mix-blend-exclusion"
+          className="absolute inset-0 h-full w-full object-cover"
           autoPlay
           muted
           loop
