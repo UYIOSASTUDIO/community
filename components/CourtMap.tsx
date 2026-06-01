@@ -53,6 +53,8 @@ export default function CourtMap({
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<Record<string, maplibregl.Marker>>({});
+  const clusterMarkersRef = useRef<maplibregl.Marker[]>([]);
+  const updateClustersRef = useRef<() => void>(() => {});
   const visibleCourtIdsRef = useRef(visibleCourtIds);
   visibleCourtIdsRef.current = visibleCourtIds;
   // Keep the latest onSelect without re-initialising the map.
@@ -75,6 +77,97 @@ export default function CourtMap({
 
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-left");
     map.on("click", () => onSelectRef.current(null));
+
+    const clearClusterMarkers = () => {
+      clusterMarkersRef.current.forEach((marker) => marker.remove());
+      clusterMarkersRef.current = [];
+    };
+
+    const updateClusters = () => {
+      clearClusterMarkers();
+
+      const visible = new Set(visibleCourtIdsRef.current);
+      const visibleCourts = courts.filter((court) => visible.has(court.id));
+      const clusterDistance = 42;
+      const shouldCluster = map.getZoom() < 15;
+
+      Object.entries(markersRef.current).forEach(([id, marker]) => {
+        marker.getElement().style.display = visible.has(id) ? "" : "none";
+      });
+
+      if (!shouldCluster) return;
+
+      const clusters: {
+        courts: Court[];
+        x: number;
+        y: number;
+        lng: number;
+        lat: number;
+      }[] = [];
+
+      visibleCourts.forEach((court) => {
+        const point = map.project([court.lng, court.lat]);
+        const cluster = clusters.find((candidate) => {
+          const dx = candidate.x - point.x;
+          const dy = candidate.y - point.y;
+          return Math.sqrt(dx * dx + dy * dy) < clusterDistance;
+        });
+
+        if (!cluster) {
+          clusters.push({
+            courts: [court],
+            x: point.x,
+            y: point.y,
+            lng: court.lng,
+            lat: court.lat,
+          });
+          return;
+        }
+
+        cluster.courts.push(court);
+        const count = cluster.courts.length;
+        cluster.x = (cluster.x * (count - 1) + point.x) / count;
+        cluster.y = (cluster.y * (count - 1) + point.y) / count;
+        cluster.lng = (cluster.lng * (count - 1) + court.lng) / count;
+        cluster.lat = (cluster.lat * (count - 1) + court.lat) / count;
+      });
+
+      clusters
+        .filter((cluster) => cluster.courts.length > 1)
+        .forEach((cluster) => {
+          cluster.courts.forEach((court) => {
+            const markerEl = markersRef.current[court.id]?.getElement();
+            if (markerEl) markerEl.style.display = "none";
+          });
+
+          const el = document.createElement("button");
+          el.type = "button";
+          el.className = "court-cluster-marker";
+          el.setAttribute("aria-label", `${cluster.courts.length} Courts anzeigen`);
+          el.textContent = String(cluster.courts.length);
+          el.addEventListener("click", (event) => {
+            event.stopPropagation();
+            onSelectRef.current(null);
+            map.easeTo({
+              center: [cluster.lng, cluster.lat],
+              zoom: Math.min(map.getZoom() + 2.2, 15.5),
+              duration: 450,
+              essential: true,
+            });
+          });
+
+          const marker = new maplibregl.Marker({ element: el, anchor: "center" })
+            .setLngLat([cluster.lng, cluster.lat])
+            .addTo(map);
+
+          clusterMarkersRef.current.push(marker);
+        });
+    };
+
+    updateClustersRef.current = updateClusters;
+    map.on("moveend", updateClusters);
+    map.on("zoomend", updateClusters);
+    map.on("resize", updateClusters);
 
     // Build a marker per court.
     courts.forEach((court) => {
@@ -123,21 +216,23 @@ export default function CourtMap({
           duration: 0,
         });
       }
+      updateClusters();
     });
 
     return () => {
+      clearClusterMarkers();
+      map.off("moveend", updateClusters);
+      map.off("zoomend", updateClusters);
+      map.off("resize", updateClusters);
       map.remove();
       mapRef.current = null;
       markersRef.current = {};
+      updateClustersRef.current = () => {};
     };
   }, [courts]);
 
   useEffect(() => {
-    const visible = new Set(visibleCourtIds);
-
-    Object.entries(markersRef.current).forEach(([id, marker]) => {
-      marker.getElement().style.display = visible.has(id) ? "" : "none";
-    });
+    updateClustersRef.current();
   }, [visibleCourtIds]);
 
   // ---- React to selection: highlight marker, fly to it, show popup. ----

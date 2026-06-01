@@ -176,6 +176,32 @@ select {
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.75));
 }
 
+.court-cluster-marker {
+  appearance: none;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(235, 235, 235, 0.72);
+  border-radius: 9999px;
+  background: rgba(17, 17, 17, 0.76);
+  color: #ebebeb;
+  cursor: pointer;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.court-cluster-marker:hover {
+  background: rgba(17, 17, 17, 0.9);
+  transform: scale(1.12);
+}
+
 /* Dark, monochrome popup to match the brand. */
 .court-popup .maplibregl-popup-content {
   --court-popup-bg: rgba(17, 17, 17, 0.74);
