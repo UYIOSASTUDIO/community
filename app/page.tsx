@@ -48,14 +48,23 @@ export default function Home() {
           <source src="/video/nike-vid.mp4" type="video/mp4" />
         </video>
 
-        {/* SVG overlay — full width minus header padding, pinned to bottom. */}
+        {/* SVG overlay — full width minus header padding, pinned to bottom.
+            Two variants: sport-desktop.svg from lg up (desktop + iPad landscape ≥1024px),
+            sport-mobile.svg below that (phones + iPad portrait). */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 px-4 sm:px-6 pb-4 sm:pb-6">
           <img
-            src="/sport-white.svg"
+            src="/sport-mobile.svg"
             alt="Courtside"
-            width={1920}
-            height={180}
-            className="block w-full h-auto mix-blend-exclusion"
+            width={217}
+            height={53}
+            className="block lg:hidden w-full h-auto mix-blend-exclusion"
+          />
+          <img
+            src="/sport-desktop.svg"
+            alt="Courtside"
+            width={217}
+            height={33}
+            className="hidden lg:block w-full h-auto mix-blend-exclusion"
           />
         </div>
       </section>
