@@ -69,7 +69,7 @@ export default function CourtMap({
       center: [13.404, 52.508],
       zoom: 10,
       attributionControl: false,
-      cooperativeGestures: true, // page scroll stays smooth; ctrl/2-finger to zoom
+      cooperativeGestures: false,
     });
     mapRef.current = map;
 
