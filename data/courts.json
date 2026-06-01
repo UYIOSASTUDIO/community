@@ -1,0 +1,82 @@
+[
+  {
+    "id": "schillerpark",
+    "name": "Sportplatz Schillerpark",
+    "address": "Schillerstraße 12, 13409 Berlin",
+    "district": "Wedding",
+    "sports": ["basketball"],
+    "lat": 52.5573,
+    "lng": 13.3526,
+    "note": "Außenplatz, 3-on-3 und 5-on-5. Alle Levels."
+  },
+  {
+    "id": "tempelhofer-feld",
+    "name": "Tempelhofer Feld",
+    "address": "Tempelhofer Damm 1, 12101 Berlin",
+    "district": "Tempelhof",
+    "sports": ["football"],
+    "lat": 52.4759,
+    "lng": 13.4016,
+    "note": "Offenes Kicken auf dem Feld, 7-gegen-7."
+  },
+  {
+    "id": "sportpark-neukoelln",
+    "name": "Sportpark Neukölln",
+    "address": "Oderstraße 182, 12053 Berlin",
+    "district": "Neukölln",
+    "sports": ["volleyball"],
+    "lat": 52.4795,
+    "lng": 13.4360,
+    "note": "Mittwochs-Volleyball, Anfänger und Fortgeschrittene gemischt."
+  },
+  {
+    "id": "strandbad-wannsee",
+    "name": "Strandbad Wannsee",
+    "address": "Wannseebadweg 25, 14129 Berlin",
+    "district": "Zehlendorf",
+    "sports": ["basketball"],
+    "lat": 52.4338,
+    "lng": 13.1786,
+    "note": "3x3 Streetball Turniere mit Pool- und K.O.-Phase."
+  },
+  {
+    "id": "urban-sports-hub",
+    "name": "Urban Sports Hub",
+    "address": "Oranienstraße 6, 10997 Berlin",
+    "district": "Kreuzberg",
+    "sports": ["basketball"],
+    "lat": 52.5030,
+    "lng": 13.4115,
+    "note": "Offizielles 3x3 Format nach FIBA-Regeln."
+  },
+  {
+    "id": "mauerpark",
+    "name": "Mauerpark",
+    "address": "Bernauer Str. 63, 13355 Berlin",
+    "district": "Prenzlauer Berg",
+    "sports": ["football"],
+    "lat": 52.5410,
+    "lng": 13.4020,
+    "note": "Sonntags-Kicken, 5-gegen-5. Teams werden vor Ort geteilt."
+  },
+  {
+    "id": "sportanlage-prenzlauer-berg",
+    "name": "Sportanlage Prenzlauer Berg",
+    "address": "Greifswalder Str. 212, 10405 Berlin",
+    "district": "Prenzlauer Berg",
+    "sports": ["volleyball"],
+    "lat": 52.5380,
+    "lng": 13.4360,
+    "note": "Mixed-Teams, lockere Atmosphäre nach Feierabend."
+  },
+  {
+    "id": "strandbad-ploetzensee",
+    "name": "Strandbad Plötzensee",
+    "address": "Nordufer 26, 13351 Berlin",
+    "district": "Wedding",
+    "sports": ["beachvolley"],
+    "lat": 52.5440,
+    "lng": 13.3340,
+    "note": "Casual Sand-Volleyball am See."
+  }
+]
