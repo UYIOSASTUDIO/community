@@ -48,23 +48,20 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      {/* HERO video — DESKTOP only: FIXED background. Stays put while the SVG
-          and content scroll up and over it. z-0 keeps it behind the opaque
-          content sheet; the transparent hero spacer reveals it. Click toggles
-          play/pause. Hidden on mobile because a permanent full-screen fixed
-          element makes iOS Safari leave a grey band behind its bottom bar. */}
-      <HeroVideo className="fixed inset-0 z-0 hidden md:block" />
+      {/* HERO video — FIXED background on all viewports. Stays put while the
+          SVG and content scroll up and over it. z-0 keeps it behind the opaque
+          content sheet; the transparent hero spacer reveals it. Click/tap
+          toggles play/pause (hero spacer is pointer-events-none so taps fall
+          through to the video). */}
+      <HeroVideo className="fixed inset-0 z-0" />
 
-      {/* HERO spacer — full viewport height. On desktop it's transparent and
-          reveals the fixed video; on mobile it holds the video inline so it
-          scrolls normally (no permanent fixed element → iOS-safe). -mt-16 pulls
-          it under the fixed chrome. */}
-      <section className="pointer-events-none relative z-10 -mt-16 h-[100svh] w-full">
-        {/* MOBILE video — inline, scrolls with the hero. Hidden on desktop.
-            pointer-events-auto so it stays clickable inside the (otherwise
-            click-through) hero spacer. */}
-        <HeroVideo className="pointer-events-auto absolute inset-0 z-0 md:hidden" />
-
+      {/* HERO spacer — transparent, reveals the fixed video; the SVG sits at
+          its bottom and scrolls up over the video. -mt-16 pulls it under the
+          fixed chrome. Height uses 100dvh (with 100svh fallback) so it always
+          fills the *visible* viewport on mobile — otherwise the light content
+          sheet below would peek in at the bottom as iOS collapses its toolbar
+          (the "grey band"). */}
+      <section className="pointer-events-none relative z-10 -mt-16 h-[100svh] [height:100dvh] w-full">
         {/* SVG overlay — full width minus header padding, pinned to bottom.
             Two variants: sport-desktop.svg from lg up (desktop + iPad landscape ≥1024px),
             sport-mobile.svg below that (phones + iPad portrait). */}

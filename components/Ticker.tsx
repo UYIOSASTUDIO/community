@@ -32,8 +32,8 @@ export default function Ticker() {
   const sequence = [...items, ...items];
 
   return (
-    <div className="marquee-mask w-full overflow-hidden bg-ink text-bg border-b border-line select-none">
-      <div className="marquee-track py-2">
+    <div className="marquee-mask h-7 w-full select-none overflow-hidden border-b border-line bg-ink text-bg">
+      <div className="marquee-track h-full items-center">
         {sequence.map((text, i) => (
           <span key={i} className="meta inline-flex items-center">
             <span className="px-6">{text}</span>

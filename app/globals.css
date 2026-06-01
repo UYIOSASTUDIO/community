@@ -54,6 +54,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+html:has(.courts-page),
+body:has(.courts-page) {
+  background-color: #111111;
+}
+
 /* NOTE: do not lock body scroll here. On iOS Safari toggling
    overflow:hidden forces the address bar to expand and leaves a grey
    band behind. The full-screen nav overlay (fixed inset-0, opaque,
@@ -133,7 +138,7 @@ select {
 
 /* ───────────────────────── Court map (MapLibre) ───────────────────────── */
 
-/* Custom marker: a coloured dot in a thin ring, grows when active. */
+/* Custom marker: sport icon only, grows when active. */
 .court-marker {
   appearance: none;
   border: 0;
@@ -144,46 +149,74 @@ select {
   line-height: 0;
 }
 
-.court-marker__dot {
-  display: block;
-  width: 16px;
-  height: 16px;
-  border-radius: 9999px;
-  background: var(--c, #fff);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.92), 0 2px 6px rgba(0, 0, 0, 0.5);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+.court-marker__icon {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.65));
+  transition: transform 0.18s ease, filter 0.18s ease;
 }
 
-.court-marker:hover .court-marker__dot {
+.court-marker__icon img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  filter: invert(1);
+  pointer-events: none;
+  user-select: none;
+}
+
+.court-marker:hover .court-marker__icon {
   transform: scale(1.18);
 }
 
-.court-marker.is-active .court-marker__dot {
-  transform: scale(1.45);
-  box-shadow: 0 0 0 4px #ffffff, 0 3px 10px rgba(0, 0, 0, 0.6);
+.court-marker.is-active .court-marker__icon {
+  transform: scale(1.28);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.75));
 }
 
 /* Dark, monochrome popup to match the brand. */
 .court-popup .maplibregl-popup-content {
-  background: #111111;
+  --court-popup-bg: rgba(17, 17, 17, 0.74);
+  --court-popup-border: rgba(235, 235, 235, 0.16);
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  background: transparent !important;
   color: #ebebeb;
-  border-radius: 12px;
   padding: 12px 14px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
 }
 
 .court-popup .maplibregl-popup-tip {
-  border-top-color: #111111;
-  border-bottom-color: #111111;
+  display: none;
+}
+
+.court-popup .maplibregl-popup-content::before {
+  position: absolute;
+  z-index: 0;
+  content: "";
+  background: var(--court-popup-bg);
+  border: 1px solid var(--court-popup-border);
+  pointer-events: none;
+  inset: 0;
+  border-radius: 6px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
 }
 
 .court-popup__name {
+  position: relative;
+  z-index: 1;
   font-weight: 800;
   font-size: 14px;
   line-height: 1.2;
 }
 
 .court-popup__meta {
+  position: relative;
+  z-index: 1;
   font-family: var(--font-mono), monospace;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -193,6 +226,8 @@ select {
 }
 
 .court-popup__addr {
+  position: relative;
+  z-index: 1;
   font-size: 12px;
   color: #9a9a9a;
   margin-top: 5px;
@@ -202,6 +237,32 @@ select {
 .maplibregl-ctrl-group {
   background: rgba(17, 17, 17, 0.85) !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.courts-map .maplibregl-ctrl-top-left,
+.courts-map .maplibregl-ctrl-top-right {
+  top: 4rem !important;
+  right: auto !important;
+  left: 0 !important;
+}
+
+.courts-map .maplibregl-ctrl-top-right .maplibregl-ctrl {
+  float: left !important;
+  margin: 10px 0 0 10px !important;
+}
+
+@media (max-width: 639px) {
+  .courts-map .maplibregl-ctrl-bottom-right {
+    top: 9.35rem !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: 0 !important;
+  }
+
+  .courts-map .maplibregl-ctrl-bottom-right .maplibregl-ctrl {
+    float: left !important;
+    margin: 10px 0 0 10px !important;
+  }
 }
 
 .maplibregl-ctrl-group button + button {

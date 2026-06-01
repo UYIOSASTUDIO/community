@@ -9,11 +9,11 @@ import { Sport } from "@/lib/types";
 /** Free, key-less dark vector basemap (WebGL → buttery smooth). */
 const STYLE_URL = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
 
-const SPORT_COLOR: Record<Sport, string> = {
-  basketball: "#ff6a2b",
-  football: "#3ddc84",
-  volleyball: "#ffd23f",
-  beachvolley: "#36c5f0",
+const SPORT_ICON: Record<Sport, string> = {
+  basketball: "/sports/basketball.png",
+  football: "/sports/basketball.png",
+  volleyball: "/sports/basketball.png",
+  beachvolley: "/sports/basketball.png",
 };
 
 const SPORT_LABEL: Record<Sport, string> = {
@@ -23,16 +23,38 @@ const SPORT_LABEL: Record<Sport, string> = {
   beachvolley: "Beach Volleyball",
 };
 
-interface Props {
-  courts: Court[];
-  selectedId: string | null;
-  onSelect: (id: string) => void;
+function getCameraPadding(container: HTMLDivElement): maplibregl.PaddingOptions {
+  const compact = container.clientWidth < 640;
+
+  return compact
+    ? { top: 112, bottom: Math.round(container.clientHeight * 0.48), left: 40, right: 40 }
+    : { top: 134, bottom: 70, left: 70, right: 430 };
 }
 
-export default function CourtMap({ courts, selectedId, onSelect }: Props) {
+function getCameraOffset(container: HTMLDivElement): [number, number] {
+  const compact = container.clientWidth < 640;
+
+  return compact ? [0, -container.clientHeight * 0.18] : [-180, 0];
+}
+
+interface Props {
+  courts: Court[];
+  visibleCourtIds: string[];
+  selectedId: string | null;
+  onSelect: (id: string | null) => void;
+}
+
+export default function CourtMap({
+  courts,
+  visibleCourtIds,
+  selectedId,
+  onSelect,
+}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<Record<string, maplibregl.Marker>>({});
+  const visibleCourtIdsRef = useRef(visibleCourtIds);
+  visibleCourtIdsRef.current = visibleCourtIds;
   // Keep the latest onSelect without re-initialising the map.
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
@@ -51,21 +73,33 @@ export default function CourtMap({ courts, selectedId, onSelect }: Props) {
     });
     mapRef.current = map;
 
-    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
-    map.addControl(
-      new maplibregl.AttributionControl({ compact: true }),
-      "bottom-right"
-    );
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-left");
+    map.on("click", () => onSelectRef.current(null));
 
     // Build a marker per court.
     courts.forEach((court) => {
-      const color = SPORT_COLOR[court.sports[0]] ?? "#ffffff";
+      const primarySport = court.sports[0];
 
       const el = document.createElement("button");
       el.type = "button";
       el.className = "court-marker";
       el.setAttribute("aria-label", court.name);
-      el.innerHTML = `<span class="court-marker__dot" style="--c:${color}"></span>`;
+      if (!visibleCourtIdsRef.current.includes(court.id)) {
+        el.style.display = "none";
+      }
+
+      const iconWrap = document.createElement("span");
+      iconWrap.className = "court-marker__icon";
+
+      const icon = document.createElement("img");
+      icon.src = SPORT_ICON[primarySport] ?? SPORT_ICON.basketball;
+      icon.alt = "";
+      icon.decoding = "async";
+      icon.draggable = false;
+
+      iconWrap.appendChild(icon);
+      el.appendChild(iconWrap);
+
       el.addEventListener("click", (e) => {
         e.stopPropagation();
         onSelectRef.current(court.id);
@@ -83,7 +117,11 @@ export default function CourtMap({ courts, selectedId, onSelect }: Props) {
       const bounds = new maplibregl.LngLatBounds();
       courts.forEach((c) => bounds.extend([c.lng, c.lat]));
       if (!bounds.isEmpty()) {
-        map.fitBounds(bounds, { padding: 70, maxZoom: 14, duration: 0 });
+        map.fitBounds(bounds, {
+          padding: getCameraPadding(containerRef.current!),
+          maxZoom: 14,
+          duration: 0,
+        });
       }
     });
 
@@ -93,6 +131,14 @@ export default function CourtMap({ courts, selectedId, onSelect }: Props) {
       markersRef.current = {};
     };
   }, [courts]);
+
+  useEffect(() => {
+    const visible = new Set(visibleCourtIds);
+
+    Object.entries(markersRef.current).forEach(([id, marker]) => {
+      marker.getElement().style.display = visible.has(id) ? "" : "none";
+    });
+  }, [visibleCourtIds]);
 
   // ---- React to selection: highlight marker, fly to it, show popup. ----
   useEffect(() => {
@@ -107,11 +153,18 @@ export default function CourtMap({ courts, selectedId, onSelect }: Props) {
     const court = courts.find((c) => c.id === selectedId);
     if (!court) return;
 
-    map.flyTo({ center: [court.lng, court.lat], zoom: 14, speed: 1.2, essential: true });
+    map.flyTo({
+      center: [court.lng, court.lat],
+      zoom: 14,
+      offset: getCameraOffset(containerRef.current!),
+      speed: 1.2,
+      essential: true,
+    });
 
     const popup = new maplibregl.Popup({
-      offset: 18,
+      offset: 34,
       closeButton: false,
+      closeOnClick: false,
       className: "court-popup",
     })
       .setLngLat([court.lng, court.lat])
@@ -129,5 +182,5 @@ export default function CourtMap({ courts, selectedId, onSelect }: Props) {
     };
   }, [selectedId, courts]);
 
-  return <div ref={containerRef} className="h-full w-full" />;
+  return <div ref={containerRef} className="courts-map h-full w-full" />;
 }
