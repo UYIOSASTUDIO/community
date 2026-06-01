@@ -5,6 +5,7 @@ import "./globals.css";
 import Ticker from "@/components/Ticker";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SmoothScroll from "@/components/SmoothScroll";
 
 // Helvetica Now Display — primary typeface (self-hosted woff2).
 const helvetica = localFont({
@@ -51,6 +52,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de" className={`${helvetica.variable} ${jetbrains.variable}`}>
       <body className="bg-bg">
+        <SmoothScroll />
+
         {/* Fixed chrome stays pinned to the top of the visual viewport. */}
         <div className="fixed inset-x-0 top-0 z-50">
           <Ticker />
@@ -62,7 +65,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             bottom edge on iOS Safari instead of stopping above its bar. */}
         <div className="pt-16">
           <main className="w-full">{children}</main>
-          <Footer />
+          {/* Opaque wrapper: covers the fixed hero video once the page has
+              scrolled past it (overflow-hidden contains the footer's top
+              margin so no transparent gap reveals the video). */}
+          <div className="relative z-0 overflow-hidden bg-bg">
+            <Footer />
+          </div>
         </div>
       </body>
     </html>

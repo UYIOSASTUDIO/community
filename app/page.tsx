@@ -1,12 +1,28 @@
 import Link from "next/link";
 import { getUpcomingEvents } from "@/lib/events";
 import Masonry from "@/components/Masonry";
+import HeroVideo from "@/components/HeroVideo";
 
 const SPORTS = [
   { key: "basketball", label: "Street Basketball" },
   { key: "football", label: "Fußball" },
   { key: "volleyball", label: "Volleyball" },
   { key: "beachvolley", label: "Beach Volleyball" },
+];
+
+// Motto im Blocksatz — jede Gruppe (ein oder mehrere Wörter) bekommt einen
+// eigenen Background. Mehrwort-Gruppen bleiben als Block zusammen, nur die
+// Lücken zwischen den Gruppen werden im Blocksatz gestreckt.
+const SLOGAN = [
+  "NO MEMBERSHIP",
+  "NO WAITLIST",
+  "NO EXCUSES",
+  "JUST SHOW UP",
+  "PLAY HARD",
+  "OWN THE GAME",
+  "RUN IT BACK",
+  "BELONG HERE",
+  "EVERY SINGLE DAY",
 ];
 
 const STEPS = [
@@ -32,22 +48,17 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      {/* HERO — full-screen video with sport.svg overlay at the bottom.
-          -mt-16 pulls it up under the fixed chrome so the video fills the
-          entire viewport (chrome is translucent and sits on top). */}
-      <section className="relative -mt-16 h-[100svh] w-full overflow-hidden bg-ink">
-        <video
-          className="absolute inset-0 h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/title-bar.png"
-        >
-          <source src="/video/nike-vid.mp4" type="video/mp4" />
-        </video>
+      {/* HERO video — FIXED background. It stays put while the SVG and the
+          content below scroll up and over it. z-0 keeps it behind the opaque
+          content sheet; the transparent hero spacer reveals it. Click toggles
+          play/pause. */}
+      <HeroVideo />
 
+      {/* HERO spacer — transparent, full viewport height. Reveals the fixed
+          video behind it. The SVG is pinned to its bottom and scrolls up over
+          the video as the page moves. -mt-16 pulls it under the fixed chrome.
+          pointer-events-none lets clicks fall through to the video. */}
+      <section className="pointer-events-none relative z-10 -mt-16 h-[100svh] w-full">
         {/* SVG overlay — full width minus header padding, pinned to bottom.
             Two variants: sport-desktop.svg from lg up (desktop + iPad landscape ≥1024px),
             sport-mobile.svg below that (phones + iPad portrait). */}
@@ -67,6 +78,26 @@ export default function Home() {
             className="hidden lg:block w-full h-auto mix-blend-exclusion"
           />
         </div>
+      </section>
+
+      {/* CONTENT SHEET — opaque; scrolls up over the fixed hero video and
+          covers it. Everything below the hero lives in here. */}
+      <div className="relative z-20 bg-bg">
+
+      {/* SLOGAN — Motto im Blocksatz, Wortgruppen mit eigenem Background */}
+      <section className="border-b border-line px-4 sm:px-6 py-12 sm:py-16">
+        <p
+          className="font-black uppercase tracking-tight text-[clamp(1rem,4vw,1.875rem)] leading-[2.2] sm:leading-[2.1]"
+          style={{ textAlign: "justify", textAlignLast: "justify" }}
+        >
+          {SLOGAN.map((group, i) => (
+            <span key={i}>
+              <span className="inline-block whitespace-nowrap leading-[0.8] text-[#9a9a9a] px-[0.12em] py-[0.04em]">
+                {group}
+              </span>{" "}
+            </span>
+          ))}
+        </p>
       </section>
 
       {/* MISSION — Was wir sind */}
@@ -145,6 +176,7 @@ export default function Home() {
           </Link>
         </div>
       </section>
+      </div>
     </div>
   );
 }

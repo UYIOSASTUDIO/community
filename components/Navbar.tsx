@@ -97,17 +97,16 @@ export default function Navbar() {
     >
       {/* Pages — stacked at the top */}
       <nav className="flex flex-1 flex-col justify-start gap-6 px-4 sm:px-6 pt-10">
-        {MOBILE_LINKS.map((link, i) => {
+        {MOBILE_LINKS.map((link) => {
           const active = pathname === link.href;
           return (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              style={{ transitionDelay: shown ? `${140 + i * 70}ms` : "0ms" }}
-              className={`text-3xl font-black uppercase leading-none tracking-tight transition-all duration-300 ease-out ${
-                shown ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
-              } ${active ? "opacity-100" : "opacity-40"}`}
+              className={`text-3xl font-black uppercase leading-none tracking-tight ${
+                active ? "opacity-100" : "opacity-40"
+              }`}
             >
               {link.label}
             </Link>

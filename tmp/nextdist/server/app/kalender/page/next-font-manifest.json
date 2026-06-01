@@ -1,0 +1,19 @@
+{
+  "pages": {},
+  "app": {
+    "[project]/app/kalender/page": [
+      "static/media/HelveticaNowDisplay_Thin-s.p.06hjz-dlbkbya.woff2",
+      "static/media/HelveticaNowDisplay_ExtLt-s.p.0893v~zr-et0~.woff2",
+      "static/media/HelveticaNowDisplay_Light-s.p.16-lwa5sdp85r.woff2",
+      "static/media/HelveticaNowDisplay_Regular-s.p.12kqo80mvcsxp.woff2",
+      "static/media/HelveticaNowDisplay_Medium-s.p.0rp4bdsm3m1ex.woff2",
+      "static/media/HelveticaNowDisplay_Bold-s.p.0junowcq5jq9p.woff2",
+      "static/media/HelveticaNowDisplay_ExtraBold-s.p.0qyq4tm3msw.7.woff2",
+      "static/media/HelveticaNowDisplay_Black-s.p.0-f.h9e~hm9oh.woff2",
+      "static/media/HelveticaNowDisplay_RegIta-s.p.13y0x6nk.y7__.woff2",
+      "static/media/HelveticaNowDisplay_BoldIta-s.p.0l~nffdo-ub0b.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pagesUsingSizeAdjust": false
+}
